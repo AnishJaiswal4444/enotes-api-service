@@ -1,10 +1,10 @@
-package com.example.Enotes_API_Service.service.impl;
+package Enotes_API_Service.service.impl;
 
-import com.example.Enotes_API_Service.Dto.CategoryDto;
-import com.example.Enotes_API_Service.Dto.CategoryResponse;
-import com.example.Enotes_API_Service.entity.Category;
-import com.example.Enotes_API_Service.repository.CategoryRepository;
-import com.example.Enotes_API_Service.service.CategoryService;
+import Enotes_API_Service.Dto.CategoryDto;
+import Enotes_API_Service.Dto.CategoryResponse;
+import Enotes_API_Service.entity.Category;
+import Enotes_API_Service.repository.CategoryRepository;
+import Enotes_API_Service.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,5 +52,15 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryResponse> categoryList = categories.stream().map(cat -> mapper.map(cat, CategoryResponse.class))
                 .toList();
         return categoryList;
+    }
+
+    @Override
+    public CategoryDto getCategoryById(Integer id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteCategory(Integer id) {
+        return null;
     }
 }

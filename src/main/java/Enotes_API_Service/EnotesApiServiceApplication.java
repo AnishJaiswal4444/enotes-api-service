@@ -1,4 +1,4 @@
-package com.example.Enotes_API_Service;
+package Enotes_API_Service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
