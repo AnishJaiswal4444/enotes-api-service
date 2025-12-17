@@ -1,4 +1,4 @@
-package com.example.Enotes_API_Service.entity;
+package Enotes_API_Service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

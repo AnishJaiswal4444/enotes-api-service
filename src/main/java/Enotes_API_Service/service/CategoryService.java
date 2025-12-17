@@ -1,7 +1,7 @@
-package com.example.Enotes_API_Service.service;
+package Enotes_API_Service.service;
 
-import com.example.Enotes_API_Service.Dto.CategoryDto;
-import com.example.Enotes_API_Service.Dto.CategoryResponse;
+import Enotes_API_Service.Dto.CategoryDto;
+import Enotes_API_Service.Dto.CategoryResponse;
 
 import java.util.List;
 

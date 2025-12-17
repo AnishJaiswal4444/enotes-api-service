@@ -1,4 +1,4 @@
-package com.example.Enotes_API_Service.Dto;
+package Enotes_API_Service.Dto;
 
 import lombok.*;
 
