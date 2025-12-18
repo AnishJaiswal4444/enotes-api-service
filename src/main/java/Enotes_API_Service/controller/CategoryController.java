@@ -2,7 +2,9 @@ package Enotes_API_Service.controller;
 
 import Enotes_API_Service.Dto.CategoryDto;
 import Enotes_API_Service.Dto.CategoryResponse;
+import Enotes_API_Service.exception.ResourceNotFoundException;
 import Enotes_API_Service.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -30,8 +33,8 @@ public class CategoryController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllCategory() {
-
-
+//        String nm = null;
+//        nm.toUpperCase(); // will cause nullpointer exxception as we are doing operations on null
         List <CategoryDto> allCategory = categoryService.getAllCategory();
         if (CollectionUtils.isEmpty(allCategory)) {
             return ResponseEntity.noContent().build();
@@ -52,9 +55,21 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryDetailsById (@PathVariable Integer id) throws Exception {
+        // Global exception handler will only be called when we have not used try catch, here we are not using the handler as we used try - catch
+//        try{
+//            CategoryDto categoryDto = categoryService.getCategoryById(id);
+//            if (ObjectUtils.isEmpty (categoryDto)) {
+//                return new ResponseEntity<>("Category not found with Id=" + id, HttpStatus.NOT_FOUND);
+//            }
+//            return new ResponseEntity<> (categoryDto, HttpStatus. OK);
+//        } catch (ResourceNotFoundException e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if (ObjectUtils.isEmpty (categoryDto)) {
-            return new ResponseEntity<>("Category not found with Id=" + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<> (categoryDto, HttpStatus. OK);
     }
