@@ -3,6 +3,7 @@ package Enotes_API_Service.service.impl;
 import Enotes_API_Service.Dto.CategoryDto;
 import Enotes_API_Service.Dto.CategoryResponse;
 import Enotes_API_Service.entity.Category;
+import Enotes_API_Service.exception.ExistDataException;
 import Enotes_API_Service.exception.ResourceNotFoundException;
 import Enotes_API_Service.repository.CategoryRepository;
 import Enotes_API_Service.service.CategoryService;
@@ -33,6 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
         //Validation checking
         validation.categoryValidation(categoryDto);
 
+        //check existing
+        Boolean exist = categoryRepo.existsByName(categoryDto.getName().trim());
+
+        if(exist) {
+            // throw error
+            throw new ExistDataException("Category already exist");
+        }
         Category category = mapper.map (categoryDto, Category.class);
 
         if(ObjectUtils.isEmpty(category.getId())){
