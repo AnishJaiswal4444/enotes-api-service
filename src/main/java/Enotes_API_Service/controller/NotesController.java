@@ -1,6 +1,7 @@
 package Enotes_API_Service.controller;
 
 import Enotes_API_Service.Dto.NotesDto;
+import Enotes_API_Service.Dto.NotesResponse;
 import Enotes_API_Service.entity.FileDetails;
 import Enotes_API_Service.exception.ResourceNotFoundException;
 import Enotes_API_Service.service.NotesService;
@@ -53,6 +54,18 @@ public class NotesController {
         if(CollectionUtils.isEmpty(notes)){
             return ResponseEntity.noContent().build();
         }
+        return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+    }
+
+    @GetMapping("/user-notes")
+    public ResponseEntity<?> getAllNotesByUser(
+            @RequestParam (name = "pageNo", defaultValue = "0") Integer pageNo,
+            @RequestParam (name = "pageSize", defaultValue =  "10")Integer pageSize){
+        Integer userId = 1;
+        NotesResponse notes = notesService.getAllNotesByUser(userId, pageNo, pageSize);
+//        if(CollectionUtils.isEmpty(notes)){
+//            return ResponseEntity.noContent().build();
+//        }
         return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
     }
 }
