@@ -1,6 +1,7 @@
 package Enotes_API_Service.service;
 
 import Enotes_API_Service.Dto.NotesDto;
+import Enotes_API_Service.Dto.NotesResponse;
 import Enotes_API_Service.entity.FileDetails;
 import Enotes_API_Service.exception.ResourceNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,5 +17,7 @@ public interface NotesService {
     public byte[] downloadFile(FileDetails fileDetails) throws Exception;
 
     FileDetails getFileDetails(Integer id) throws Exception;
+
+    NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize);
 
 }
