@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.io.FileNotFoundException;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,5 +42,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleExistDataException(ExistDataException e){
 //        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<?> handleFileNotFoundException(ExistDataException e){
+//        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
