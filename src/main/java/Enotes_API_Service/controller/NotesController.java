@@ -3,7 +3,6 @@ package Enotes_API_Service.controller;
 import Enotes_API_Service.Dto.NotesDto;
 import Enotes_API_Service.Dto.NotesResponse;
 import Enotes_API_Service.entity.FileDetails;
-import Enotes_API_Service.exception.ResourceNotFoundException;
 import Enotes_API_Service.service.NotesService;
 import Enotes_API_Service.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +62,28 @@ public class NotesController {
             @RequestParam (name = "pageSize", defaultValue =  "10")Integer pageSize){
         Integer userId = 1;
         NotesResponse notes = notesService.getAllNotesByUser(userId, pageNo, pageSize);
-//        if(CollectionUtils.isEmpty(notes)){
-//            return ResponseEntity.noContent().build();
-//        }
+        return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception {
+        notesService.softDeleteNotes(id);
+        return CommonUtil.createBuildResponseMessage("Delete Successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/restore/{id}")
+    public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception {
+        notesService.restoreNotes(id);
+        return CommonUtil.createBuildResponseMessage("Notes Restored Successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/recycle-bin")
+    public ResponseEntity<?> getUserRecycleBinNotes() throws Exception {
+        Integer userId = 1;
+        List<NotesDto> notes = notesService.getUserRecycleBinNotes(userId);
+        if(CollectionUtils.isEmpty(notes)){
+            return CommonUtil.createBuildResponseMessage("Notes not available in Recycle Bin", HttpStatus.OK);
+        }
         return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
     }
 }
