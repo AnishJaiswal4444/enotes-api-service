@@ -45,8 +45,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(FileNotFoundException.class)
-    public ResponseEntity<?> handleFileNotFoundException(ExistDataException e){
+    public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e){
 //        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e){
+        return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
