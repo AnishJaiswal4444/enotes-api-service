@@ -4,9 +4,11 @@ import Enotes_API_Service.Dto.CategoryDto;
 import Enotes_API_Service.Dto.TodoDto;
 import Enotes_API_Service.Dto.UserDto;
 import Enotes_API_Service.enums.TodoStatus;
+import Enotes_API_Service.exception.ExistDataException;
 import Enotes_API_Service.exception.ResourceNotFoundException;
 import Enotes_API_Service.exception.ValidationException;
 import Enotes_API_Service.repository.RoleRepository;
+import Enotes_API_Service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +24,9 @@ public class Validation {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public void categoryValidation(CategoryDto categoryDto){
 
@@ -86,6 +91,12 @@ public class Validation {
         }
         if(!StringUtils.hasText(userDto.getEmail()) || !userDto.getEmail().matches(Constants.EMAIL_REGEX)){
             throw new IllegalArgumentException("Email is invalid");
+        }else{
+            // Validate if email already exist
+            Boolean existEmail = userRepository.existsByEmail(userDto.getEmail());
+            if(existEmail){
+                throw new ExistDataException("Email already exist");
+            }
         }
         if(!StringUtils.hasText(userDto.getMobNo()) || !userDto.getMobNo().matches(Constants.MOBILE_REGEX)){
             throw new IllegalArgumentException("Mobile No. is invalid");
