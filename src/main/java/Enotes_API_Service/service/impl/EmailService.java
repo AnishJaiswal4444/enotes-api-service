@@ -1,4 +1,4 @@
-package Enotes_API_Service.service;
+package Enotes_API_Service.service.impl;
 
 import Enotes_API_Service.Dto.EmailRequest;
 import jakarta.mail.internet.MimeMessage;

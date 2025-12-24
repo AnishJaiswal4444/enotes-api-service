@@ -2,11 +2,11 @@ package Enotes_API_Service.service.impl;
 
 import Enotes_API_Service.Dto.EmailRequest;
 import Enotes_API_Service.Dto.UserDto;
+import Enotes_API_Service.entity.AccountStatus;
 import Enotes_API_Service.entity.Role;
 import Enotes_API_Service.entity.User;
 import Enotes_API_Service.repository.RoleRepository;
 import Enotes_API_Service.repository.UserRepository;
-import Enotes_API_Service.service.EmailService;
 import Enotes_API_Service.service.UserService;
 import Enotes_API_Service.util.Validation;
 import org.modelmapper.ModelMapper;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,47 +36,56 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Override
-    public Boolean register(UserDto userDto) throws Exception {
+    public Boolean register(UserDto userDto, String url) throws Exception {
 
         // Validate user role
         validation.userValidation(userDto);
         User user = mapper.map(userDto, User.class);
         setRole(userDto, user);
+
+        AccountStatus status = AccountStatus.builder()
+                .isActive(false)
+                .verificationCode(UUID.randomUUID().toString())
+                .build();
+        user.setStatus(status);
         User savedUser = userRepository.save(user);
         if(!ObjectUtils.isEmpty(savedUser)){
-            sendVerificationEmail(savedUser);
+            sendVerificationEmail(savedUser, url);
             return true;
         }
         return false;
     }
 
-    private void sendVerificationEmail(User savedUser) throws Exception {
+    private void sendVerificationEmail(User savedUser,String url) throws Exception {
+
+        String verificationLink = url+"/api/v1/home/verify?uid=%d&code=%s"
+                .formatted(savedUser.getId(), savedUser.getStatus().getVerificationCode());
 
         String message = """
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background-color: #4CAF50; color: white; padding: 20px; text-align: center;">
-                <h2>Welcome to Enotes!</h2>
-            </div>
-            <div style="padding: 20px; background-color: #f9f9f9;">
-                <p>Hi <strong>%s</strong>,</p>
-                
-                <p>Your account has been created successfully! We're excited to have you on board.</p>
-                
-                <p>To get started, please verify your email address by clicking the button below:</p>
-                
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="#" style="background-color: #4CAF50; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
-                        Verify My Account
-                    </a>
-                </div>
-                
-                <p style="color: #666; font-size: 14px;">If you didn't create this account, please ignore this email.</p>
-            </div>
-            <div style="text-align: center; padding: 20px; color: #666; font-size: 12px;">
-                <p>Thanks,<br>Enotes Team</p>
-            </div>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background-color: #4CAF50; color: white; padding: 20px; text-align: center;">
+            <h2>Welcome to Enotes!</h2>
         </div>
-        """.formatted(savedUser.getFirstName());
+        <div style="padding: 20px; background-color: #f9f9f9;">
+            <p>Hi <strong>%s</strong>,</p>
+            
+            <p>Your account has been created successfully! We're excited to have you on board.</p>
+            
+            <p>To get started, please verify your email address by clicking the button below:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="%s" style="background-color: #4CAF50; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Verify My Account
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">If you didn't create this account, please ignore this email.</p>
+        </div>
+        <div style="text-align: center; padding: 20px; color: #666; font-size: 12px;">
+            <p>Thanks,<br>Enotes Team</p>
+        </div>
+    </div>
+    """.formatted(savedUser.getFirstName(), verificationLink);
 
         EmailRequest emailRequest = EmailRequest.builder()
                 .to(savedUser.getEmail())
