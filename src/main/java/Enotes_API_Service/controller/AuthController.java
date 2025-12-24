@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired
     private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto){
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) throws Exception {
         Boolean registered = userService.register(userDto);
         if(registered){
             return CommonUtil.createBuildResponseMessage("User Registered Successfully", HttpStatus.CREATED);
