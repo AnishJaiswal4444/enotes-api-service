@@ -1,7 +1,10 @@
 package Enotes_API_Service.service.impl;
 
 import Enotes_API_Service.Dto.EmailRequest;
+import Enotes_API_Service.Dto.LoginRequest;
+import Enotes_API_Service.Dto.LoginResponse;
 import Enotes_API_Service.Dto.UserDto;
+import Enotes_API_Service.config.security.CustomUserDetails;
 import Enotes_API_Service.entity.AccountStatus;
 import Enotes_API_Service.entity.Role;
 import Enotes_API_Service.entity.User;
@@ -11,6 +14,10 @@ import Enotes_API_Service.service.UserService;
 import Enotes_API_Service.util.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -35,6 +42,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
     @Override
     public Boolean register(UserDto userDto, String url) throws Exception {
 
@@ -48,12 +62,27 @@ public class UserServiceImpl implements UserService {
                 .verificationCode(UUID.randomUUID().toString())
                 .build();
         user.setStatus(status);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         if(!ObjectUtils.isEmpty(savedUser)){
             sendVerificationEmail(savedUser, url);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        if(authenticate.isAuthenticated()){
+            CustomUserDetails customUserDetails = (CustomUserDetails)authenticate.getPrincipal();
+            String token = "asdvbhsabdjsdkj";
+            LoginResponse loginResponse = LoginResponse.builder()
+                    .user(mapper.map(customUserDetails.getUser(), UserDto.class))
+                    .token(token).build();
+            return loginResponse;
+        }
+        return null;
     }
 
     private void sendVerificationEmail(User savedUser,String url) throws Exception {
