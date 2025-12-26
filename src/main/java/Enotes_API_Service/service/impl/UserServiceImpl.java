@@ -10,6 +10,7 @@ import Enotes_API_Service.entity.Role;
 import Enotes_API_Service.entity.User;
 import Enotes_API_Service.repository.RoleRepository;
 import Enotes_API_Service.repository.UserRepository;
+import Enotes_API_Service.service.JwtService;
 import Enotes_API_Service.service.UserService;
 import Enotes_API_Service.util.Validation;
 import org.modelmapper.ModelMapper;
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
 
     @Override
     public Boolean register(UserDto userDto, String url) throws Exception {
@@ -76,7 +80,7 @@ public class UserServiceImpl implements UserService {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         if(authenticate.isAuthenticated()){
             CustomUserDetails customUserDetails = (CustomUserDetails)authenticate.getPrincipal();
-            String token = "asdvbhsabdjsdkj";
+            String token = jwtService.generateToken(customUserDetails.getUser());
             LoginResponse loginResponse = LoginResponse.builder()
                     .user(mapper.map(customUserDetails.getUser(), UserDto.class))
                     .token(token).build();
