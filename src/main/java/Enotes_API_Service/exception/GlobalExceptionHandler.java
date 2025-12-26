@@ -4,6 +4,7 @@ import Enotes_API_Service.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpServerErrorException;
@@ -58,5 +59,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SuccessException.class)
     public ResponseEntity<?> handleSuccessException(SuccessException e){
         return CommonUtil.createBuildResponseMessage(e.getMessage(), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e){
+        return CommonUtil.createBuildResponseMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
