@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) {
         Boolean saveCategory = categoryService.saveCategory(categoryDto);
         if (saveCategory) {
@@ -35,6 +37,7 @@ public class CategoryController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllCategory() {
         List <CategoryDto> allCategory = categoryService.getAllCategory();
         if (CollectionUtils.isEmpty(allCategory)) {
@@ -46,6 +49,7 @@ public class CategoryController {
     }
 
     @GetMapping("/active")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getActiveCategory() {
         List <CategoryResponse> allCategory = categoryService.getActiveCategory();
         if (CollectionUtils.isEmpty(allCategory)) {
@@ -57,6 +61,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getCategoryDetailsById (@PathVariable Integer id) throws Exception {
         // Global exception handler will only be called when we have not used try catch, here we are not using the handler as we used try - catch
         CategoryDto categoryDto = categoryService.getCategoryById(id);
@@ -68,6 +73,7 @@ public class CategoryController {
         return CommonUtil.createBuildResponse(categoryDto, HttpStatus.OK);
     }
     @DeleteMapping ("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCategoryById (@PathVariable Integer id) {
         Boolean deleted = categoryService.deleteCategory(id);
         if (deleted) {
