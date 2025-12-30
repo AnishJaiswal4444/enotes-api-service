@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.FileNotFoundException;
+import java.nio.file.AccessDeniedException;
 
 @Slf4j
 @ControllerAdvice
@@ -63,6 +64,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e){
-        return CommonUtil.createBuildResponseMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e){
+        return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 }
