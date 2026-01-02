@@ -2,10 +2,9 @@ package Enotes_API_Service.controller;
 
 import Enotes_API_Service.Dto.LoginRequest;
 import Enotes_API_Service.Dto.LoginResponse;
-import Enotes_API_Service.Dto.UserDto;
+import Enotes_API_Service.Dto.UserRequest;
 import Enotes_API_Service.service.UserService;
 import Enotes_API_Service.util.CommonUtil;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request) throws Exception {
         String url = CommonUtil.getUrl(request);
         Boolean registered = userService.register(userDto, url);
         if(registered){

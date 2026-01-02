@@ -1,6 +1,5 @@
 package Enotes_API_Service.Dto;
 
-import Enotes_API_Service.entity.Role;
 import lombok.*;
 
 
@@ -11,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class UserDto {
+public class UserRequest {
 
     private Integer id;
 

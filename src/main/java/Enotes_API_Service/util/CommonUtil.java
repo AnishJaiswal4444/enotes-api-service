@@ -1,5 +1,8 @@
 package Enotes_API_Service.util;
 
+import Enotes_API_Service.Dto.UserResponse;
+import Enotes_API_Service.config.security.CustomUserDetails;
+import Enotes_API_Service.entity.User;
 import Enotes_API_Service.handler.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
@@ -7,6 +10,9 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Objects;
 
 public class CommonUtil {
 
@@ -64,5 +70,15 @@ public class CommonUtil {
         String apiUrl = request.getRequestURL().toString(); //http:localhost:8080/api/v1/auth
         apiUrl = apiUrl.replace(request.getServletPath(),""); //http:localhost:8080
         return apiUrl;
+    }
+
+    public static User getLoggedInUser(){
+        try {
+            CustomUserDetails logUser = (CustomUserDetails) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+            return logUser.getUser();
+        } catch (Exception e) {
+            throw e;
+        }
+
     }
 }
