@@ -3,7 +3,7 @@ package Enotes_API_Service.service.impl;
 import Enotes_API_Service.Dto.EmailRequest;
 import Enotes_API_Service.Dto.LoginRequest;
 import Enotes_API_Service.Dto.LoginResponse;
-import Enotes_API_Service.Dto.UserDto;
+import Enotes_API_Service.Dto.UserRequest;
 import Enotes_API_Service.config.security.CustomUserDetails;
 import Enotes_API_Service.entity.AccountStatus;
 import Enotes_API_Service.entity.Role;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Boolean register(UserDto userDto, String url) throws Exception {
+    public Boolean register(UserRequest userDto, String url) throws Exception {
 
         // Validate user role
         validation.userValidation(userDto);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
             CustomUserDetails customUserDetails = (CustomUserDetails)authenticate.getPrincipal();
             String token = jwtService.generateToken(customUserDetails.getUser());
             LoginResponse loginResponse = LoginResponse.builder()
-                    .user(mapper.map(customUserDetails.getUser(), UserDto.class))
+                    .user(mapper.map(customUserDetails.getUser(), UserRequest.class))
                     .token(token).build();
             return loginResponse;
         }
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
         emailService.sendEmail(emailRequest);
     }
 
-    private void setRole(UserDto userDto, User user) {
+    private void setRole(UserRequest userDto, User user) {
         List<Integer> reqRoleId = userDto.getRoles().stream().map(r -> r.getId()).toList();
         List<Role> roles = roleRepository.findAllById(reqRoleId);
         user.setRoles(roles);

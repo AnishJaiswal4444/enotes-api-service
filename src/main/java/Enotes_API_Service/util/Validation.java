@@ -2,7 +2,7 @@ package Enotes_API_Service.util;
 
 import Enotes_API_Service.Dto.CategoryDto;
 import Enotes_API_Service.Dto.TodoDto;
-import Enotes_API_Service.Dto.UserDto;
+import Enotes_API_Service.Dto.UserRequest;
 import Enotes_API_Service.enums.TodoStatus;
 import Enotes_API_Service.exception.ExistDataException;
 import Enotes_API_Service.exception.ResourceNotFoundException;
@@ -81,7 +81,7 @@ public class Validation {
         if(!statusFound) throw new ResourceNotFoundException("Invalid status");
     }
 
-    public void userValidation(UserDto userDto){
+    public void userValidation(UserRequest userDto){
 
         if(!StringUtils.hasText(userDto.getFirstName())){
             throw new IllegalArgumentException("First name is invalid");

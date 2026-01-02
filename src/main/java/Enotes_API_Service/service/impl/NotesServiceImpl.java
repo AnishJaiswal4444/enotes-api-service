@@ -12,6 +12,7 @@ import Enotes_API_Service.repository.FavouriteNoteRepository;
 import Enotes_API_Service.repository.FileRepository;
 import Enotes_API_Service.repository.NotesRepository;
 import Enotes_API_Service.service.NotesService;
+import Enotes_API_Service.util.CommonUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,8 +166,9 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize) {
+    public NotesResponse getAllNotesByUser(Integer pageNo, Integer pageSize) {
         // if 10 items = 5, 5 --> 2 pages
+        Integer userId = CommonUtil.getLoggedInUser().getId();
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Notes> pageNotes = notesRepo.findByCreatedByAndIsDeletedFalse(userId, pageable);
         List<NotesDto> notesDto = pageNotes.get().map(n -> mapper.map(n, NotesDto.class)).toList();
@@ -199,7 +201,8 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public List<NotesDto> getUserRecycleBinNotes(Integer userId) {
+    public List<NotesDto> getUserRecycleBinNotes() {
+        Integer userId = CommonUtil.getLoggedInUser().getId();
         List<Notes> recycleNotes = notesRepo.findByCreatedByAndIsDeletedTrue(userId);
         List<NotesDto> notesDtoList = recycleNotes.stream().map(note -> mapper.map(note, NotesDto.class)).toList();
         return notesDtoList;
@@ -217,7 +220,8 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public void emptyRecycleBin(int userId) {
+    public void emptyRecycleBin() {
+        Integer userId = CommonUtil.getLoggedInUser().getId();
         List<Notes> recycleNotes = notesRepo.findByCreatedByAndIsDeletedTrue(userId);
         if(!CollectionUtils.isEmpty(recycleNotes)){
             notesRepo.deleteAll(recycleNotes);
@@ -243,7 +247,7 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public List<FavouriteNoteDto> getUserFavouriteNote() {
-        Integer userId = 1;
+        Integer userId = CommonUtil.getLoggedInUser().getId();
         List<FavouriteNote> favouriteNotes = favouriteNoteRepository.findByUserId(userId);
         return favouriteNotes.stream().map(fn -> mapper.map(fn, FavouriteNoteDto.class)).toList();
     }
