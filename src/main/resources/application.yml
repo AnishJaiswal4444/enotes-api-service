@@ -4,7 +4,7 @@ spring:
     name: Enotes_API_Service
   # Active Profile
   profiles:
-    active: dev
+    active: uat
 
 ---
 # Dev Config
