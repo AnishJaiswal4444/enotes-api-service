@@ -1,0 +1,195 @@
+# Spring Application Configuration
+spring:
+  application:
+    name: Enotes_API_Service
+  # Active Profile
+  profiles:
+    active: dev
+
+---
+# Dev Config
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/enotes_dev
+    username: root
+    password: ananyaanish
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # Email Configuration
+  mail:
+    host: smtp.gmail.com
+    username: ananyaanish4444@gmail.com
+    password: mgto vcem afei utzw
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# File upload path
+file:
+  upload:
+    path: notes/
+
+---
+# Test Config
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/enotes_test
+    username: root
+    password: ananyaanish
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # Email Configuration
+  mail:
+    host: smtp.gmail.com
+    username: ananyaanish4444@gmail.com
+    password: mgto vcem afei utzw
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# File upload path
+file:
+  upload:
+    path: notes/
+
+---
+# UAT Config
+spring:
+  config:
+    activate:
+      on-profile: uat
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/enotes_uat
+    username: root
+    password: ananyaanish
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # Email Configuration
+  mail:
+    host: smtp.gmail.com
+    username: ananyaanish4444@gmail.com
+    password: mgto vcem afei utzw
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# File upload path
+file:
+  upload:
+    path: notes/
+
+---
+# Prod Config
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/enotes_prod
+    username: root
+    password: ananyaanish
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # Email Configuration
+  mail:
+    host: smtp.gmail.com
+    username: ananyaanish4444@gmail.com
+    password: mgto vcem afei utzw
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# File upload path
+file:
+  upload:
+    path: notes/
