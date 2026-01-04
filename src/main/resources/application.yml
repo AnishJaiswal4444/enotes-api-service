@@ -52,7 +52,13 @@ spring:
 file:
   upload:
     path: notes/
-
+Springdoc:
+  Swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    path: /enotes-doc
+  api-docs:
+    path: /enotes-api-doc
 ---
 # Test Config
 spring:
@@ -100,6 +106,16 @@ file:
   upload:
     path: notes/
 
+Server:
+    port: 8081
+
+Springdoc:
+  Swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    path: /enotes-doc
+  api-docs:
+    path: /enotes-api-doc
 ---
 # UAT Config
 spring:
@@ -147,6 +163,16 @@ file:
   upload:
     path: notes/
 
+Server:
+  port: 8082
+
+Springdoc:
+  Swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    path: /enotes-doc
+  api-docs:
+    path: /enotes-api-doc
 ---
 # Prod Config
 spring:
@@ -193,3 +219,14 @@ spring:
 file:
   upload:
     path: notes/
+
+Server:
+  port: 8083
+
+Springdoc:
+  Swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    path: /enotes-doc
+  api-docs:
+    path: /enotes-api-doc
