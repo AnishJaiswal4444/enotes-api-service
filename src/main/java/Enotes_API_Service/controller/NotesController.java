@@ -26,7 +26,7 @@ public class NotesController implements NotesEndpoint {
     private NotesService notesService;
 
     @Override
-    public ResponseEntity<?> saveNotes(@RequestParam String notes, @RequestParam (required = false) MultipartFile file) throws Exception {
+    public ResponseEntity<?> saveNotes( String notes, MultipartFile file) throws Exception {
         Boolean saveNotes = notesService.saveNotes(notes, file);
         if(saveNotes){
             return CommonUtil.createBuildResponseMessage("Notes saved successfully", HttpStatus.CREATED);
@@ -35,7 +35,7 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> downloadFile( Integer id) throws Exception {
 
         FileDetails fileDetails = notesService.getFileDetails(id);
         byte[] data = notesService.downloadFile(fileDetails);
@@ -60,28 +60,28 @@ public class NotesController implements NotesEndpoint {
 
     @Override
     public ResponseEntity<?> getAllNotesByUser(
-            @RequestParam (name = "pageNo", defaultValue = "0") Integer pageNo,
-            @RequestParam (name = "pageSize", defaultValue =  "10")Integer pageSize){
+             Integer pageNo,
+             Integer pageSize){
         NotesResponse notes = notesService.getAllNotesByUser(pageNo, pageSize);
         return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> searchNotes( @RequestParam(name = "key", defaultValue = "") String key,
-            @RequestParam (name = "pageNo", defaultValue = "0") Integer pageNo,
-            @RequestParam (name = "pageSize", defaultValue =  "10")Integer pageSize){
+    public ResponseEntity<?> searchNotes(  String key,
+             Integer pageNo,
+             Integer pageSize){
         NotesResponse notes = notesService.getAllNotesBySearch(pageNo, pageSize, key);
         return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> deleteNotes( Integer id) throws Exception {
         notesService.softDeleteNotes(id);
         return CommonUtil.createBuildResponseMessage("Delete Successfully", HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> restoreNotes( Integer id) throws Exception {
         notesService.restoreNotes(id);
         return CommonUtil.createBuildResponseMessage("Notes Restored Successfully", HttpStatus.OK);
     }
@@ -96,7 +96,7 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> hardDeleteNotes( Integer id) throws Exception {
         notesService.hardDeleteNotes(id);
         return CommonUtil.createBuildResponseMessage("Delete Successfully", HttpStatus.OK);
     }
@@ -108,13 +108,13 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> favouriteNote(@PathVariable Integer noteId) throws Exception {
+    public ResponseEntity<?> favouriteNote( Integer noteId) throws Exception {
         notesService.favouriteNote(noteId);
         return CommonUtil.createBuildResponseMessage("Note added to Favourite", HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<?> unFavouriteNote(@PathVariable Integer favNoteId) throws Exception {
+    public ResponseEntity<?> unFavouriteNote( Integer favNoteId) throws Exception {
         notesService.unFavouriteNote(favNoteId);
         return CommonUtil.createBuildResponseMessage("Note Removed from Favourite", HttpStatus.OK);
     }
@@ -129,7 +129,7 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> copyNote(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> copyNote( Integer id) throws Exception {
         Boolean copyNotes = notesService.copyNote(id);
         if(copyNotes) {
             return CommonUtil.createBuildResponseMessage("Note has been copied", HttpStatus.CREATED);
