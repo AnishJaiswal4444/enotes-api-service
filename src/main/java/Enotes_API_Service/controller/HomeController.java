@@ -5,6 +5,9 @@ import Enotes_API_Service.service.HomeService;
 import Enotes_API_Service.service.UserService;
 import Enotes_API_Service.util.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/home")
 public class HomeController {
 
+    Logger log = LoggerFactory.getLogger(HomeController.class);
+
     @Autowired
     private HomeService homeService;
 
@@ -22,10 +27,12 @@ public class HomeController {
 
     @GetMapping("/verify")
     public ResponseEntity<?> verifyUserAccount(@RequestParam Integer uid, @RequestParam String code) throws Exception {
+        log.info("HomeController : verifyUserAccount : Execution Start");
         Boolean verifyAccount = homeService.verifyAccount(uid, code);
         if(verifyAccount){
             return CommonUtil.createBuildResponseMessage("Account is verified", HttpStatus.CREATED);
         }
+        log.info("HomeController : verifyUserAccount : Execution End");
         return CommonUtil.createErrorResponseMessage("Invalid Verification link", HttpStatus.BAD_REQUEST);
     }
 

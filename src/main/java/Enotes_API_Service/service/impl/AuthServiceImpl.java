@@ -10,6 +10,7 @@ import Enotes_API_Service.repository.UserRepository;
 import Enotes_API_Service.service.JwtService;
 import Enotes_API_Service.service.AuthService;
 import Enotes_API_Service.util.Validation;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -52,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Boolean register(UserRequest userDto, String url) throws Exception {
-
+        log.info("AuthServiceImpl : registerUser() : Start");
         // Validate user role
         validation.userValidation(userDto);
         User user = mapper.map(userDto, User.class);
@@ -65,11 +67,15 @@ public class AuthServiceImpl implements AuthService {
         user.setStatus(status);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
-        if(!ObjectUtils.isEmpty(savedUser)){
-            sendVerificationEmail(savedUser, url);
-            return true;
+        if(ObjectUtils.isEmpty(savedUser)){
+            log.info("Error : {}","unable to save user");
+            return false;
         }
-        return false;
+        log.info("Message : {} "," User has been registered successfully");
+        sendVerificationEmail(savedUser, url);
+        log.info("Message : {} "," email sent successfully");
+        log.info("AuthServiceImpl : registerUser() : End");
+        return true;
     }
 
     @Override
