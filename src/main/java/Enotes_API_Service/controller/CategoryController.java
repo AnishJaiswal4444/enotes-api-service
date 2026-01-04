@@ -22,7 +22,7 @@ public class CategoryController implements CategoryEndpoint {
     private CategoryService categoryService;
 
     @Override
-    public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<?> saveCategory( CategoryDto categoryDto) {
         Boolean saveCategory = categoryService.saveCategory(categoryDto);
         if (saveCategory) {
             return CommonUtil.createBuildResponseMessage("saved success", HttpStatus.CREATED);
@@ -56,7 +56,7 @@ public class CategoryController implements CategoryEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> getCategoryDetailsById (@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> getCategoryDetailsById (Integer id) throws Exception {
         // Global exception handler will only be called when we have not used try catch, here we are not using the handler as we used try - catch
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if (ObjectUtils.isEmpty (categoryDto)) {
@@ -68,7 +68,7 @@ public class CategoryController implements CategoryEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> deleteCategoryById (@PathVariable Integer id) {
+    public ResponseEntity<?> deleteCategoryById (Integer id) {
         Boolean deleted = categoryService.deleteCategory(id);
         if (deleted) {
 //            return new ResponseEntity<>("Category deleted success", HttpStatus.OK);
