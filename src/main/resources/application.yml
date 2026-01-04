@@ -52,6 +52,8 @@ spring:
 file:
   upload:
     path: notes/
+
+# Swagger
 Springdoc:
   Swagger-ui:
     operationsSorter: method
@@ -59,6 +61,17 @@ Springdoc:
     path: /enotes-doc
   api-docs:
     path: /enotes-api-doc
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: beans,loggers
+  endpoint:
+    shutdown:
+      enabled: true
 ---
 # Test Config
 spring:
@@ -230,3 +243,4 @@ Springdoc:
     path: /enotes-doc
   api-docs:
     path: /enotes-api-doc
+
