@@ -3,6 +3,7 @@ package Enotes_API_Service.controller;
 import Enotes_API_Service.Dto.LoginRequest;
 import Enotes_API_Service.Dto.LoginResponse;
 import Enotes_API_Service.Dto.UserRequest;
+import Enotes_API_Service.endpoint.AuthEndpoint;
 import Enotes_API_Service.service.AuthService;
 import Enotes_API_Service.util.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,13 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthEndpoint {
 
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register")
+    @Override
     public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request) throws Exception {
         log.info("AuthController : registerUser() : Start");
         String url = CommonUtil.getUrl(request);
@@ -37,7 +37,7 @@ public class AuthController {
         return CommonUtil.createBuildResponseMessage("User Registered Successfully", HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @Override
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
         LoginResponse loginResponse = authService.login(loginRequest);
         if(ObjectUtils.isEmpty(loginResponse)){
