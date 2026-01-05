@@ -22,8 +22,7 @@ public interface NotesEndpoint {
     @Operation(summary = "Create Note", description = "User - Create a new note with optional file attachment", tags = {"Notes"})
     @PostMapping(value = "/", consumes = "multipart/form-data")
     @PreAuthorize(ROLE_USER)
-    public ResponseEntity<?> saveNotes(@RequestParam
-                                           @Parameter(description = "JSON String Notes"
+    public ResponseEntity<?> saveNotes(@RequestParam @Parameter(description = "JSON String Notes"
                                                    , required = true
                                                    , content = @Content(schema = @Schema(implementation = NotesRequest.class)))
                                            String notes, @RequestParam(required = false) MultipartFile file) throws Exception;
