@@ -6,13 +6,18 @@ import Enotes_API_Service.entity.Category;
 import Enotes_API_Service.exception.ExistDataException;
 import Enotes_API_Service.exception.ResourceNotFoundException;
 import Enotes_API_Service.repository.CategoryRepository;
+import Enotes_API_Service.service.CacheManagerService;
 import Enotes_API_Service.service.CategoryService;
 import Enotes_API_Service.util.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +33,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private Validation validation;
+
+    @Autowired
+    private CacheManagerService cacheService;
 
     @Override
     public Boolean saveCategory (CategoryDto categoryDto) {
@@ -72,12 +80,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable("allCategory")
     public List<CategoryDto> getAllCategory() {
         List<Category> categories = categoryRepo.findByIsDeletedFalse();
         return (List<CategoryDto>) categories.stream().map (cat->mapper.map (cat, CategoryDto.class)).toList();
     }
 
     @Override
+    @Cacheable("activeCategory")
     public List<CategoryResponse> getActiveCategory() {
 
         List<Category> categories = categoryRepo.findByIsActiveTrueAndIsDeletedFalse();
@@ -87,6 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "getCategoryById", key = "#id")
     public CategoryDto getCategoryById(Integer id) throws Exception {
         Category category = categoryRepo.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id = " +id));
 
@@ -97,6 +108,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "getCategoryById", key = "#id")
     public Boolean deleteCategory(Integer id) {
         Optional<Category> findByCategory =categoryRepo.findById(id);
 
@@ -104,6 +116,8 @@ public class CategoryServiceImpl implements CategoryService {
             Category category = findByCategory.get();
             category.setIsDeleted(true);
             categoryRepo.save(category);
+            //remove from cache
+            cacheService.removeCacheByName(Arrays.asList("allCategory", "activeCategory"));
             return true;
         }
         return false;
