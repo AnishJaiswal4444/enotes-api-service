@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>Enotes_API_Service</artifactId>
+	<artifactId>enotes-api-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Enotes_API_Service</name>
 	<description>Demo project for Spring Boot</description>
@@ -125,6 +125,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 			<version>4.0.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+			<version>4.0.0-M2</version>
 		</dependency>
 	</dependencies>
 
